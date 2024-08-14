@@ -19,5 +19,4 @@ import { FirebaseService } from './services/firebase/firebase.service';
 })
 export class AppComponent {
   title = 'crm-dashboard';
-  public firebaseService: FirebaseService = inject(FirebaseService);
 }
