@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { FirebaseService } from './services/firebase/firebase.service';
 
 @Component({
   selector: 'app-root',
@@ -18,4 +19,5 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 })
 export class AppComponent {
   title = 'crm-dashboard';
+  public firebaseService: FirebaseService = inject(FirebaseService);
 }
