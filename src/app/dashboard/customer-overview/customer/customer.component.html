@@ -1,0 +1,13 @@
+<div class="customer-container">
+    <span>{{customer.customerName}}</span>
+    <span>{{customer.company}}</span>
+    <span>{{customer.phoneNumber}}</span>
+    <span>{{customer.email}}</span>
+    <span>{{customer.country}}</span>
+    @if (customer.status) {
+    <button class="active-button">Aktiv</button>
+    } @else {
+    <button class="inactive-button">Inaktiv</button>
+    }
+</div>
+<div class="stroke-container"></div>
