@@ -49,9 +49,9 @@
                     </svg>
                 </div>
                 @for (page of firebaseService.numberOfPages; track $index) {
-                    <div class="page-container current-page">
-                        {{page}}
-                    </div>
+                <div class="page-container current-page">
+                    {{$index +1 }}
+                </div>
                 }
                 <div class="page-container">
                     <svg width="5" height="7" viewBox="0 0 5 7" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -13,8 +13,7 @@ export class FirebaseService {
   public customers!: Customer[];
   private customerSubscription!: Subscription;
 
-  private page: number = 1;
-  public numberOfPages: number[] = [this.page];
+  public numberOfPages: number[] = [];
 
   private obj: Customer = {
     customerName: 'string',
@@ -27,14 +26,16 @@ export class FirebaseService {
 
   constructor() {
     this.loadCustomers();
+    this.loadNumberOfPages();
+  }
+
+  ngOnInit(): void {
+    this.checkNumberOfPages();
   }
 
   private loadCustomers(): void {
     const dataRef = collection(this.firestore, 'customers');
     const customers$: Observable<Customer[]> = collectionData(dataRef, { idField: 'id' }) as Observable<Customer[]>;
-    if (this.customerSubscription) {
-      this.customerSubscription.unsubscribe();
-    }
     this.customerSubscription = customers$.subscribe(data => {
       this.customers = data;
     });
@@ -42,13 +43,32 @@ export class FirebaseService {
 
   public async addCustomer() {
     await addDoc(collection(this.firestore, 'customers'), this.obj);
-    console.log(this.customers.length % 9)
+    this.checkNumberOfPages();
+  }
+
+  private async loadNumberOfPages(): Promise<void> {
+    const dataRef = collection(this.firestore, 'numberOfPages');
+    const pages$: Observable<number[]> = collectionData(dataRef, { idField: 'id' }) as unknown as Observable<number[]>;
+    this.customerSubscription = pages$.subscribe(async data => {
+      this.numberOfPages = data;
+      if (this.numberOfPages.length === 0) {
+        await this.checkNumberOfPages();
+      }
+      console.log(this.numberOfPages);
+    });
+  }
+
+  private async checkNumberOfPages(): Promise<void> {
     if (this.customers.length % 9 === 0) {
-      this.page++;
+      await this.addPageNumber();
     }
-    if (!this.numberOfPages.includes(this.page)) {
-      this.numberOfPages.push(this.page);
+    if (!this.numberOfPages.includes(this.numberOfPages.length)) {
+      this.numberOfPages.push(this.numberOfPages.length);
     }
+  }
+
+  private async addPageNumber() {
+    await addDoc(collection(this.firestore, 'numberOfPages'), { page: this.numberOfPages.length });
   }
 
   ngOnDestroy() {
