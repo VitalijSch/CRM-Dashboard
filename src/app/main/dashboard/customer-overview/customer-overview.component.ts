@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CustomerComponent } from './customer/customer.component';
-import { FirebaseService } from '../../services/firebase/firebase.service';
+import { FirebaseService } from '../../../services/firebase/firebase.service';
 
 @Component({
   selector: 'app-customer-overview',

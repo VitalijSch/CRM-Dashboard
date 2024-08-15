@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Customer } from '../../../interfaces/customer';
+import { Customer } from '../../../../interfaces/customer';
 
 @Component({
   selector: 'app-customer',

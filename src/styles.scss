@@ -9,6 +9,69 @@ body {
     font-family: 'Poppins';
 }
 
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes moveAndFade {
+    0% {
+        height: 100vh;
+        width: 100%;
+        opacity: 1;
+    }
+
+    100% {
+        height: 25vh;
+        width: 25%;
+        opacity: 0;
+    }
+}
+
+@keyframes moveAndFadeCenter {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        z-index: -1;
+    }
+}
+
+@keyframes moveAndFadeCenterImg {
+    0% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    100% {
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes moveToTopCenter {
+    0% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    100% {
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
 /* poppins-100 - latin */
 @font-face {
     font-display: swap;
