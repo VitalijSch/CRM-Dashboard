@@ -34,21 +34,21 @@
             <span>Status</span>
         </div>
         <div class="headline-stroke-container"></div>
-        @for (customer of firebaseService.customers; track $index) {
+        @for (customer of firestoreDatabaseService.customers; track $index) {
         <app-customer [customer]="customer"></app-customer>
         }
         <div class="showing-data-container">
             <div class="showing-data">
                 Zeigt Daten 1 bis 8 von 256.000 Einträgen an.
             </div>
-            <div (click)="firebaseService.addCustomer()" class="number-of-pages-container">
+            <div (click)="firestoreDatabaseService.addCustomer()" class="number-of-pages-container">
                 <div class="page-container">
                     <svg width="5" height="7" viewBox="0 0 5 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M2.936 6.392L0.176 3.668L2.936 0.944H4.664L1.892 3.668L4.664 6.392H2.936Z"
                             fill="#404B52" />
                     </svg>
                 </div>
-                @for (page of firebaseService.numberOfPages; track $index) {
+                @for (page of firestoreDatabaseService.numberOfPages; track $index) {
                 <div class="page-container current-page">
                     {{$index +1 }}
                 </div>

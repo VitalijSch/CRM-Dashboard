@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CustomerComponent } from './customer/customer.component';
-import { FirebaseService } from '../../../services/firebase/firebase.service';
+import { FirestoreDatabaseService } from '../../../services/firestore-database/firestore-database.service';
 
 @Component({
   selector: 'app-customer-overview',
@@ -12,5 +12,5 @@ import { FirebaseService } from '../../../services/firebase/firebase.service';
   styleUrl: './customer-overview.component.scss'
 })
 export class CustomerOverviewComponent {
-  public firebaseService: FirebaseService = inject(FirebaseService);
+  public firestoreDatabaseService: FirestoreDatabaseService = inject(FirestoreDatabaseService);
 }

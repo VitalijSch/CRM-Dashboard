@@ -5,7 +5,7 @@
         <div class="input-container">
             <div class="pos-rel-container">
                 <input type="email" formControlName="email" id="email" placeholder="beispielnamen@email.com">
-                <img src="./assets/images/login/email.png" alt="email">
+                <img src="./assets/images/email.png" alt="email">
             </div>
             @if (userForm.get('email')?.touched && userForm.get('email')?.invalid) {
             @if(userForm.get('email')?.errors?.['required']) {
@@ -22,7 +22,7 @@
         <div class="input-container">
             <div class="pos-rel-container">
                 <input type="password" formControlName="password" id="password" placeholder="Passwort">
-                <img src="./assets/images/login/lock.png" alt="lock">
+                <img src="./assets/images/lock.png" alt="lock">
             </div>
             @if (userForm.get('password')?.touched && userForm.get('password')?.invalid) {
             @if(userForm.get('password')?.errors?.['required']) {
