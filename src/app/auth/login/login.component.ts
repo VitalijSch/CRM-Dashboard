@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,7 @@ import { Router, RouterModule } from '@angular/router';
 export class LoginComponent {
   private fb: FormBuilder = inject(FormBuilder);
   private router: Router = inject(Router);
+  public authenticationService: AuthenticationService = inject(AuthenticationService);
 
   public userForm!: FormGroup;
   public errorMessage!: string;
@@ -47,9 +49,5 @@ export class LoginComponent {
     //       this.errorMessage = 'too-many-requests';
     //     }
     //   });
-  }
-
-  public loginAsGuest(): void {
-    this.router.navigate(['main/guest']);
   }
 }

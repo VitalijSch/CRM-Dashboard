@@ -44,7 +44,7 @@
         <div class="login-button-container">
             <button class="inactive-button" [ngClass]="{'active-button': userForm.valid}" [disabled]="userForm.invalid"
                 type="submit">Anmelden</button>
-            <button type="button" (click)="loginAsGuest()">Gäste-Login</button>
+            <button type="button" (click)="authenticationService.loginAsGuest()">Gäste-Login</button>
         </div>
     </form>
 </div>
