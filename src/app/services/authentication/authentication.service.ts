@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Auth, getAuth, signInAnonymously, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { User } from '../../interfaces/user';
+import { FirebaseError } from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,8 @@ export class AuthenticationService {
     email: '',
     avatar: ''
   };
+
+  public showErrorMessage: string = '';
 
   public loginAsGuest(): void {
     signInAnonymously(this.auth)
@@ -37,6 +40,12 @@ export class AuthenticationService {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        if (errorCode === 'auth/invalid-credential') {
+          this.showErrorMessage = 'Bitte überprüfe deine Anmeldedaten und versuche es erneut.';
+          setTimeout(() => {
+            this.showErrorMessage = '';
+          }, 4000);
+        }
         console.error("Error signing in: ", errorCode, errorMessage);
       });
   }
@@ -62,10 +71,13 @@ export class AuthenticationService {
       console.log("User created: ", user);
       this.router.navigate(['auth/login']);
     } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error creating user: ", (error as any).code, error.message);
-      } else {
-        console.error("Unknown error: ", error);
+      if (error instanceof FirebaseError) {
+        if (error.code === 'auth/email-already-in-use') {
+          this.showErrorMessage = 'Diese E-Mail-Adresse ist leider schon vergeben.';
+          setTimeout(() => {
+            this.showErrorMessage = '';
+          }, 4000);
+        }
       }
     }
   }

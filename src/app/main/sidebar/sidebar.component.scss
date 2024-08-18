@@ -84,11 +84,22 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
+        transform: scale(1.1);
+    }
 
     .user-avatar-name-container {
         display: flex;
         align-items: center;
         gap: 20px;
+
+        img {
+            width: 85px;
+            object-fit: contain;
+        }
 
         div {
             display: flex;

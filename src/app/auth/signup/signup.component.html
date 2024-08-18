@@ -40,9 +40,9 @@
             <span>Diese E-Mail-Adresse ist leider ungültig.</span>
             }
             }
-            <!-- @if (errorMessage !== null) {
-            <span>*Diese E-Mail-Adresse ist leider schon vergeben.</span>
-            } -->
+            @if (authenticationService.showErrorMessage !== '') {
+            <span>{{authenticationService.showErrorMessage}}</span>
+            }
         </div>
         <div class="input-container">
             <div class="pos-rel-container">

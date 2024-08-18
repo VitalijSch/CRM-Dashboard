@@ -1,6 +1,8 @@
 <div class="user-overview-container">
     <div class="top-container">
-        <span>Hallo Mustermann 🖐🏻,</span>
+        @if (authenticationService.user && authenticationService.user.name) {
+        <span>Hallo {{authenticationService.user.name.split(' ')[0]}} 🖐🏻,</span>
+        }
         <div class="input-container">
             <input type="text" name="search" id="search" placeholder="Suchen...">
             <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -15,7 +17,8 @@
             <div>
                 <span>Gesamtkunden</span>
                 <span>5.432</span>
-                <span><img src="./assets/images/increase.png" alt="increase arrow"><span>16%</span> in diesem Monat</span>
+                <span><img src="./assets/images/increase.png" alt="increase arrow"><span>16%</span> in diesem
+                    Monat</span>
             </div>
         </div>
         <div class="line-container"></div>
@@ -24,7 +27,8 @@
             <div>
                 <span>Mitglieder</span>
                 <span>1.832</span>
-                <span><img src="./assets/images/decrease.png" alt="decrease arrow"><span>5%</span> in diesem Monat</span>
+                <span><img src="./assets/images/decrease.png" alt="decrease arrow"><span>5%</span> in diesem
+                    Monat</span>
             </div>
         </div>
         <div class="line-container"></div>

@@ -47,12 +47,12 @@
                 </svg>
             </div>
         </div>
-        <div (click)="authenticationService.logout()" class="user-container">
+        <div (click)="userService.toggleShowUser()" class="user-container">
             <div class="user-avatar-name-container">
-                <img src="./assets/images/customers.png" alt="avatar">
+                <img src="{{authenticationService.user.avatar}}" alt="avatar">
                 <div>
-                    <span>Vitalij Schwab</span>
-                    <span>Webentwickler</span>
+                    <span>{{authenticationService.user.name}}</span>
+                    <span>{{authenticationService.user.email}}</span>
                 </div>
             </div>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

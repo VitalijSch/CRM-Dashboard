@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-user-overview',
@@ -8,5 +9,5 @@ import { Component } from '@angular/core';
   styleUrl: './user-overview.component.scss'
 })
 export class UserOverviewComponent {
-
+  public authenticationService: AuthenticationService = inject(AuthenticationService);
 }

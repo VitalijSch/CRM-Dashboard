@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,4 +11,5 @@ import { AuthenticationService } from '../../services/authentication/authenticat
 })
 export class SidebarComponent {
   public authenticationService: AuthenticationService = inject(AuthenticationService);
+  public userService: UserService = inject(UserService);
 }
