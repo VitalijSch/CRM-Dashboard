@@ -1,25 +1,14 @@
 <div class="customer-overview-container">
     <div class="top-container">
         <div class="headline-container">
-            <span>Alle Kunden</span>
-            <span>Aktive Mitglieder</span>
+            <span>Kunden</span>
         </div>
         <div class="search-filter-container">
-            <div class="input-container">
-                <input type="text" name="search" id="search" placeholder="Suchen...">
-                <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="10" cy="10" r="6" stroke="#7e7e7e" stroke-width="2" />
-                    <line x1="15.2" y1="15.2" x2="20" y2="20" stroke="#7e7e7e" stroke-width="2"
-                        stroke-linecap="round" />
-                </svg>
-            </div>
             <div class="select-container">
-                <label for="sort-by">Sortieren : </label>
+                <label for="sort-by">Sortieren nach : </label>
                 <select id="sort-by" name="sort-by">
                     <option value="newest">Neuste</option>
                     <option value="latest">Älteste</option>
-                    <option value="active">Aktive</option>
-                    <option value="inactive">Inaktive</option>
                 </select>
             </div>
         </div>
@@ -31,15 +20,14 @@
             <span>Telefonnummer</span>
             <span>E-Mail</span>
             <span>Land</span>
-            <span>Status</span>
         </div>
         <div class="headline-stroke-container"></div>
-        @for (customer of firestoreDatabaseService.customers; track $index) {
+        @for (customer of firestoreDatabaseService.customersSignal(); track $index) {
         <app-customer [customer]="customer"></app-customer>
         }
         <div class="showing-data-container">
             <div class="showing-data">
-                Zeigt Daten 1 bis 8 von 256.000 Einträgen an.
+                Seite 1 von 8
             </div>
             <div (click)="firestoreDatabaseService.addCustomer()" class="number-of-pages-container">
                 <div class="page-container">
@@ -48,11 +36,9 @@
                             fill="#404B52" />
                     </svg>
                 </div>
-                @for (page of firestoreDatabaseService.numberOfPages; track $index) {
                 <div class="page-container current-page">
-                    {{$index +1 }}
+                    1
                 </div>
-                }
                 <div class="page-container">
                     <svg width="5" height="7" viewBox="0 0 5 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0.344 0.944H2.072L4.832 3.668L2.072 6.392H0.344L3.116 3.668L0.344 0.944Z"

@@ -48,6 +48,6 @@ export class UserComponent {
 
   public logoutUser(): void {
     this.userService.toggleShowUser();
-    this.authenticationService.logout()
+    this.authenticationService.logout();
   }
 }

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Auth, getAuth, signInAnonymously, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { User } from '../../interfaces/user';
 import { FirebaseError } from 'firebase/app';
+import { FirestoreDatabaseService } from '../firestore-database/firestore-database.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,10 @@ export class AuthenticationService {
   private auth: Auth = getAuth();
 
   private router: Router = inject(Router);
+  private firestoreDatabaseService: FirestoreDatabaseService = inject(FirestoreDatabaseService);
 
   public user: User = {
+    id: '',
     name: '',
     email: '',
     avatar: ''
@@ -53,6 +56,9 @@ export class AuthenticationService {
   public logout() {
     signOut(this.auth)
       .then(() => {
+        if (this.user.name !== 'Guest') {
+          this.user.isOnline = false;
+        }
         console.log("User signed out");
       })
       .catch((error) => {
@@ -69,6 +75,12 @@ export class AuthenticationService {
         photoURL: avatarUrl
       });
       console.log("User created: ", user);
+      this.user.id = user.uid;
+      this.user.name = user.displayName;
+      this.user.email = user.email;
+      this.user.avatar = user.photoURL;
+      this.user.isOnline = false;
+      await this.firestoreDatabaseService.addCreatedUsers(this.user);
       this.router.navigate(['auth/login']);
     } catch (error) {
       if (error instanceof FirebaseError) {
@@ -89,6 +101,9 @@ export class AuthenticationService {
         this.loggedAsUser(user);
         console.log('user is logged:', this.user);
       } else {
+        if (this.user.name !== 'Guest') {
+          this.user.isOnline = false;
+        }
         this.router.navigate(['auth/login']);
       }
     });
@@ -97,6 +112,7 @@ export class AuthenticationService {
 
   private loggedAsGuest(user: any): void {
     if (user.email === null) {
+      this.user.id = user.uid;
       this.user.name = 'Guest';
       this.user.email = 'guest@mail.com';
       this.user.avatar = './assets/images/profile.png';
@@ -105,9 +121,11 @@ export class AuthenticationService {
 
   private loggedAsUser(user: any): void {
     if (user.email !== null) {
+      this.user.id = user.uid;
       this.user.name = user.displayName;
       this.user.email = user.email;
       this.user.avatar = user.photoURL;
+      this.user.isOnline = true;
     }
   }
 }

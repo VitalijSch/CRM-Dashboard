@@ -1,8 +1,9 @@
-import { inject, Injectable } from '@angular/core';
-import { collectionData, Firestore } from '@angular/fire/firestore';
-import { addDoc, collection } from 'firebase/firestore';
+import { effect, inject, Injectable, signal } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, CollectionReference, doc, DocumentData, onSnapshot, QuerySnapshot, updateDoc } from 'firebase/firestore';
 import { Customer } from '../../interfaces/customer';
-import { Observable, Subscription } from 'rxjs';
+import { User } from '../../interfaces/user';
+import { Unsubscribe } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,11 @@ import { Observable, Subscription } from 'rxjs';
 export class FirestoreDatabaseService {
   private firestore: Firestore = inject(Firestore);
 
-  public customers!: Customer[];
-  private customerSubscription!: Subscription;
+  public customersSignal = signal<Customer[]>([]);
+  public usersSignal = signal<User[]>([]);
 
-  public numberOfPages: number[] = [];
+  private customersUnsubscribe!: Unsubscribe;
+  private usersUnsubscribe!: Unsubscribe;
 
   private obj: Customer = {
     customerName: 'string',
@@ -22,58 +24,60 @@ export class FirestoreDatabaseService {
     email: 'string',
     country: 'string',
     status: false
-  }
+  };
 
   constructor() {
     this.loadCustomers();
-    this.loadNumberOfPages();
+    this.loadCreatedUsers();
   }
 
-  ngOnInit(): void {
-    this.checkNumberOfPages();
+  private customersCollection(): CollectionReference<DocumentData> {
+    return collection(this.firestore, 'customers');
+  }
+
+  private usersCollection(): CollectionReference<DocumentData> {
+    return collection(this.firestore, 'users');
   }
 
   private loadCustomers(): void {
-    const dataRef = collection(this.firestore, 'customers');
-    const customers$: Observable<Customer[]> = collectionData(dataRef, { idField: 'id' }) as Observable<Customer[]>;
-    this.customerSubscription = customers$.subscribe(data => {
-      this.customers = data;
+    this.customersUnsubscribe = onSnapshot(this.customersCollection(), (querysnapshot: QuerySnapshot<DocumentData>) => {
+      const customersArray: Customer[] = [];
+      querysnapshot.forEach(doc => {
+        customersArray.push(doc.data() as Customer);
+      });
+      this.customersSignal.set(customersArray);
     });
   }
 
-  public async addCustomer() {
-    await addDoc(collection(this.firestore, 'customers'), this.obj);
-    this.checkNumberOfPages();
-  }
-
-  private async loadNumberOfPages(): Promise<void> {
-    const dataRef = collection(this.firestore, 'numberOfPages');
-    const pages$: Observable<number[]> = collectionData(dataRef, { idField: 'id' }) as unknown as Observable<number[]>;
-    this.customerSubscription = pages$.subscribe(async data => {
-      this.numberOfPages = data;
-      if (this.numberOfPages.length === 0) {
-        await this.checkNumberOfPages();
-      }
-      console.log(this.numberOfPages);
+  private loadCreatedUsers(): void {
+    this.usersUnsubscribe = onSnapshot(this.usersCollection(), (querysnapshot: QuerySnapshot<DocumentData>) => {
+      const usersArray: User[] = [];
+      querysnapshot.forEach(doc => {
+        usersArray.push(doc.data() as User);
+      });
+      this.usersSignal.set(usersArray);
     });
   }
 
-  private async checkNumberOfPages(): Promise<void> {
-    if (this.customers.length % 9 === 0) {
-      await this.addPageNumber();
-    }
-    if (!this.numberOfPages.includes(this.numberOfPages.length)) {
-      this.numberOfPages.push(this.numberOfPages.length);
-    }
+  public async addCustomer(): Promise<void> {
+    await addDoc(this.customersCollection(), this.obj);
   }
 
-  private async addPageNumber() {
-    await addDoc(collection(this.firestore, 'numberOfPages'), { page: this.numberOfPages.length });
+  public async addCreatedUsers(user: any): Promise<void> {
+    await addDoc(this.usersCollection(), user);
   }
 
-  ngOnDestroy() {
-    if (this.customerSubscription) {
-      this.customerSubscription.unsubscribe();
+  public async updateUserStatus(userId: string, isOnline: boolean): Promise<void> {
+    const userDocRef = doc(this.firestore, `users/${userId}`);
+    await updateDoc(userDocRef, { isOnline });
+  }
+
+  ngOnDestroy(): void {
+    if (this.customersUnsubscribe) {
+      this.customersUnsubscribe();
+    }
+    if (this.usersUnsubscribe) {
+      this.usersUnsubscribe();
     }
   }
 }
